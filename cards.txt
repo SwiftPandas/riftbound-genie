@@ -330,3 +330,22 @@ Stellacorn Herder|4|0|Unit|
 Thrill of the Hunt|2|1|Spell|
 Up from the Deep|3|0|Spell|
 Zhonya's Hourglass|2|0|Gear|H
+Aspiring Engineer|3|1|Unit|
+Brutalizer|2|0|Gear|
+Cloth Armor|1|0|Gear|
+Mask of Foresight|2|0|Gear|
+Pit Crew|3|0|Unit|
+Poro Snax|1|1|Gear|
+Sterak's Gage|3|2|Gear|
+Ornn, Blacksmith|5|1|Unit|
+Blitzcrank, Impassive|5|1|Unit|
+Long Sword|2|1|Gear|
+Mischievous Marai|2|0|Unit|
+Shuriken Flip|1|1|Spell|
+Arise!|6|1|Spell|
+Doran's Shield|1|0|Gear|
+Eye of the Herald|1|0|Gear|
+Guards!|3|0|Spell|
+Soul Sword|1|0|Gear|
+Azir, Sovereign|4|0|Unit|
+Desert's Call|2|0|Spell|
