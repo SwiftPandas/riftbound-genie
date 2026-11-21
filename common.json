@@ -1,0 +1,244 @@
+{
+ "source": "RQ Los Angeles, 36 unique top lists (Sept 2026, before Radiance)",
+ "updated": "2026-11-21",
+ "ref": {
+  "unit": [
+   16,
+   19.0,
+   22
+  ],
+  "cheap": [
+   18,
+   23.0,
+   25
+  ],
+  "instant": [
+   14,
+   16.0,
+   19
+  ],
+  "draw": [
+   6,
+   10.0,
+   13
+  ],
+  "inter": [
+   3,
+   7.0,
+   11
+  ],
+  "avgcost": [
+   2.9,
+   3.24,
+   3.58
+  ]
+ },
+ "mine": {
+  "Ambessa (now)": {
+   "unit": 30,
+   "cheap": 13,
+   "instant": 14,
+   "draw": 3,
+   "inter": 5,
+   "avgcost": 3.85
+  },
+  "Fiora (now)": {
+   "unit": 25,
+   "cheap": 17,
+   "instant": 8,
+   "draw": 6,
+   "inter": 0,
+   "avgcost": 4.15
+  },
+  "Fiora (future)": {
+   "unit": 23,
+   "cheap": 17,
+   "instant": 9,
+   "draw": 8,
+   "inter": 5,
+   "avgcost": 4.83
+  },
+  "Ziggs (now)": {
+   "unit": 31,
+   "cheap": 15,
+   "instant": 13,
+   "draw": 3,
+   "inter": 10,
+   "avgcost": 3.9
+  },
+  "K'Sante (now)": {
+   "unit": 28,
+   "cheap": 18,
+   "instant": 9,
+   "draw": 6,
+   "inter": 1,
+   "avgcost": 4.08
+  },
+  "K'Sante (future)": {
+   "unit": 23,
+   "cheap": 21,
+   "instant": 14,
+   "draw": 5,
+   "inter": 3,
+   "avgcost": 3.85
+  },
+  "Jarvan (now)": {
+   "unit": 29,
+   "cheap": 18,
+   "instant": 8,
+   "draw": 1,
+   "inter": 3,
+   "avgcost": 3.92
+  },
+  "Orianna (now)": {
+   "unit": 20,
+   "cheap": 21,
+   "instant": 13,
+   "draw": 20,
+   "inter": 5,
+   "avgcost": 3.7
+  },
+  "Orianna (future)": {
+   "unit": 18,
+   "cheap": 23,
+   "instant": 17,
+   "draw": 20,
+   "inter": 8,
+   "avgcost": 3.35
+  }
+ },
+ "staples": {
+  "Ambessa": [
+   [
+    "Rampage",
+    9
+   ],
+   [
+    "Sabotage",
+    9
+   ],
+   [
+    "Hidden Blade",
+    6
+   ],
+   [
+    "First Mate",
+    6
+   ],
+   [
+    "Irresistible Faefolk",
+    6
+   ]
+  ],
+  "Fiora": [
+   [
+    "Sabotage",
+    9
+   ],
+   [
+    "Hidden Blade",
+    6
+   ],
+   [
+    "First Mate",
+    6
+   ],
+   [
+    "Irresistible Faefolk",
+    6
+   ],
+   [
+    "Deathgrip",
+    5
+   ]
+  ],
+  "Ziggs": [
+   [
+    "Star-Crossed",
+    11
+   ],
+   [
+    "Gust",
+    9
+   ],
+   [
+    "Ferrous Forerunner",
+    9
+   ],
+   [
+    "Vex, Apathetic",
+    9
+   ],
+   [
+    "Fizz, Trickster",
+    7
+   ]
+  ],
+  "K'Sante": [
+   [
+    "Scuttle Crab",
+    9
+   ],
+   [
+    "Rampage",
+    9
+   ],
+   [
+    "Sabotage",
+    9
+   ],
+   [
+    "Back Off",
+    7
+   ],
+   [
+    "Not So Fast",
+    7
+   ]
+  ],
+  "Jarvan": [
+   [
+    "Rampage",
+    9
+   ],
+   [
+    "Sabotage",
+    9
+   ],
+   [
+    "Hidden Blade",
+    6
+   ],
+   [
+    "First Mate",
+    6
+   ],
+   [
+    "Irresistible Faefolk",
+    6
+   ]
+  ],
+  "Orianna": [
+   [
+    "Defy",
+    14
+   ],
+   [
+    "Scuttle Crab",
+    9
+   ],
+   [
+    "Back Off",
+    7
+   ],
+   [
+    "Not So Fast",
+    7
+   ],
+   [
+    "Sprite Fountain",
+    6
+   ]
+  ]
+ }
+}
