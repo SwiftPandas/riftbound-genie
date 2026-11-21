@@ -1,5 +1,5 @@
 // Deck Lab offline cache. Every file is served from the cache at once, then refreshed from the web in the background.
-const C = 'riftgenie-ba9935dbb4', FILES = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "engine.js", "library.json", "decks.json", "legends.json", "meta.json", "rules.txt", "calib.json", "kw.json", "might.json", "domains.json", "cards_official.json", "cards.txt", "mydecks.json", "common.json", "faq.json"];
+const C = 'riftgenie-8110a322e9', FILES = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "engine.js", "library.json", "decks.json", "legends.json", "meta.json", "rules.txt", "calib.json", "kw.json", "might.json", "domains.json", "cards_official.json", "cards.txt", "mydecks.json", "common.json", "faq.json"];
 self.addEventListener('install', e => { e.waitUntil(caches.open(C).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', e => {
