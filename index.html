@@ -213,11 +213,16 @@ window.addEventListener('hashchange', () => { const h = location.hash.slice(1); 
 
 /* deck lab */
 function legendOf(champ){ for (const [k,v] of Object.entries(LEGS)) if (v.champs.includes(champ)) return k; return null; }
-function closest(name){ const n = norm(name); let best = null, bs = 0;
-  for (const c of simCards()){ const m = norm(c); let s = 0; for (const w of n.split(/[ ,]+/)) if (w.length > 2 && m.includes(w)) s += w.length; if (s > bs){ bs = s; best = c; } }
-  return bs >= 4 ? best : null; }
-function parse(){ const out = {}, bad = [], nosim = [];
-  for (let line of $('list').value.split('\n')){
+function closest(name){ const n = norm(name).replace(/[^a-z0-9 ]/g, ''); if (n.length < 3) return null;
+  const ed = (a, b) => { const m = a.length, k = b.length; let prev = Array.from({length: k + 1}, (_, j) => j);
+    for (let i = 1; i <= m; i++){ const cur = [i]; for (let j = 1; j <= k; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; } return prev[k]; };
+  let best = null, bs = 1e9;
+  for (const c of Object.keys(LIB)){ if (LIB[c].t === 'Legend' || LIB[c].t === 'Battlefield' || LIB[c].t === 'Rune') continue; const m = norm(c).replace(/[^a-z0-9 ]/g, '');
+    const d = Math.min(ed(n, m), m.includes(',') ? 99 : 99, ed(n, m.split(' ').slice(0, n.split(' ').length).join(' ')) + 1);
+    if (d < bs || (d === bs && LIB[c].sim && !(best && LIB[best].sim))){ bs = d; best = c; } }
+  return bs <= Math.max(2, Math.floor(n.length / 3)) ? best : null; }
+function parse(text){ const out = {}, bad = [], nosim = [];
+  for (let line of (text == null ? $('list').value : text).split('\n')){
     line = line.replace(/\(.*?\)|\[.*?\]/g, '').trim(); if (!line || /^(main|side|sideboard|runes?|rune pool|battlefields?|legend|champion)\b.*:?$/i.test(line)) continue;
     let m = line.match(/^(\d+)\s*x?\s+(.+)$/i) || line.match(/^(.+?)\s+x?(\d+)$/i); let q = 1, name = line;
     if (m){ if (/^\d/.test(m[1])) { q = +m[1]; name = m[2]; } else { q = +m[2]; name = m[1]; } }
@@ -241,7 +246,7 @@ function check(){
     msg.push(`Legend: <b>${esc(leg)}</b> · ${[...doms].map(d => `<span style="color:${RUNE[d]}">${d}</span>`).join(', ')}`); }
   $('check').innerHTML = msg.join('<br>');
   $('run').disabled = !(ok && ready && leg) || running;
-  if (ready && !running) $('run').textContent = 'Test this deck';
+  if (ready && !running) $('run').textContent = Object.keys(res).length ? 'Test again' : 'Test this deck';
   return ok && !!leg; }
 function loadDeck(){ const d = DECKS[$('load').value]; if (!d) return;
   $('list').value = Object.entries(d.list).map(([c,q]) => `${q} ${c}`).join('\n'); check(); $('champ').value = d.champ; check(); save(); }
@@ -321,20 +326,33 @@ for (const id of ['q','fcol','ftype']) $(id).addEventListener('input', doSearch)
 
 const STOP = new Set('a an the is are was be do does did can could would should will i my me you your it its of to in on at for and or but if when what how why which who with without from by as this that these those there their they them than then so not no yes any all each every get gets got have has had into out up down about after before during while just only also more most much many some such very still play played playing card cards rule rules use used using does work works happen happens'.split(' '));
 function offlineAnswer(q){
-  const words = [...new Set(norm(q).replace(/[^a-z0-9' ]/g, ' ').split(/\s+/).filter(w => w.length > 2 && !STOP.has(w)).map(w => w.replace(/(ies)$/, 'y').replace(/([^s])s$/, '$1')))];
-  const nq = ' ' + norm(q).replace(/[^a-z0-9' ]/g, ' ') + ' '; const names = new Set();
-  for (const n of Object.keys(LIB)){ const full = norm(n).replace(/[^a-z0-9' ]/g, ' ').replace(/\s+/g, ' ').trim(), head = full.split(' ').length > 1 && norm(n).includes(',') ? norm(n).split(',')[0].trim() : full;
-    if (nq.includes(' ' + full + ' ')) names.add(n); else if (head.length >= 4 && nq.includes(' ' + head + ' ') && !LIB[n].ban && [...names].every(m => !norm(m).startsWith(head))) names.add(n); }
-  const lines = RULES.split('## AUDIT')[0].split('\n').filter(l => l.trim().length > 30 && !l.startsWith('#'));
-  const df = w => lines.reduce((c, l) => c + (norm(l).includes(w) ? 1 : 0), 0); const wt = {}; for (const w of words){ const d = df(w); wt[w] = d ? Math.log(1 + lines.length / d) : 0; }
+  const nq = ' ' + norm(q).replace(/[^a-z0-9' -]/g, ' ').replace(/-/g, ' ').replace(/\s+/g, ' ').trim() + ' ';
+  const words = [...new Set(nq.trim().split(' ').filter(w => w.length > 2 && !STOP.has(w)).map(w => w.replace(/(ies)$/, 'y').replace(/([^s])s$/, '$1')))];
+  // cards named in the question: full names first; a first name alone only when it fits one card
+  const names = new Set(), heads = {};
+  for (const n of Object.keys(LIB)){ const full = norm(n).replace(/[^a-z0-9' ]/g, ' ').replace(/\s+/g, ' ').trim();
+    if (full.length >= 4 && nq.includes(' ' + full + ' ')) names.add(n);
+    else if (norm(n).includes(',')){ const h = norm(n).split(',')[0].trim(); if (h.length >= 4 && nq.includes(' ' + h + ' ')) (heads[h] = heads[h] || []).push(n); } }
+  for (const [h, ns] of Object.entries(heads)){ if ([...names].some(m => norm(m).startsWith(h))) continue; const ok = ns.filter(n => !LIB[n].ban); if (ok.length === 1) names.add(ok[0]); else if (ok.length) names.add(ok.find(n => LIB[n].sim) || ok[0]); }
+  // a plain-English answer for the most common questions
+  const ranked = (FAQ || []).map(f => { let sc = 0; for (const k of f.k){ const kk = norm(k); if (nq.includes(' ' + kk + ' ') || (kk.length > 4 && nq.includes(' ' + kk))) sc += 1 + kk.split(' ').length + (f.k.length <= 3 ? 1.5 : 0); } return [sc, f]; })
+    .filter(x => x[0] > 0).sort((a, b) => b[0] - a[0]);
+  const faq = ranked.length ? ranked[0][1] : null, faq2 = ranked.length > 1 && ranked[1][0] >= 2 ? ranked[1][1] : null;
   const num = (q.match(/\b\d{3}\b/) || [])[0];
-  const scored = lines.map(l => { const t = norm(l), lead = t.slice(0, 40); let s = 0; for (const w of words) if (t.includes(w)) s += wt[w] + (lead.includes(w) ? wt[w] : 0); if (num && t.includes(num)) s += 6; return [s, l]; })
-    .filter(x => x[0] > 0).sort((a, b) => b[0] - a[0]).slice(0, 5);
+  const all = RULES.split('## AUDIT')[0].split('\n').filter(l => l.trim().length > 30 && !l.startsWith('#'));
+  const lines = num ? all : all.filter(l => !/^-\s*\d{3}/.test(l));
+  const df = w => lines.reduce((c, l) => c + (norm(l).includes(w) ? 1 : 0), 0); const wt = {}; for (const w of words){ const d = df(w); wt[w] = d ? Math.log(1 + lines.length / d) : 0; }
+  const scored = lines.map(l => { const t = norm(l), lead = t.slice(0, 40); let s = 0; for (const w of words) if (t.includes(w)) s += wt[w] + (lead.includes(w) ? wt[w] : 0); if (num && t.includes(num)) s += 8; return [s, l]; })
+    .filter(x => x[0] > 0).sort((a, b) => b[0] - a[0]).slice(0, faq ? 2 : 4);
   let h = '';
+  if (faq) h += `<div style="padding:12px 14px;border-radius:12px;background:var(--bg);border:1px solid var(--line)"><h3 style="margin:0 0 6px">${esc(faq.t)}</h3>${faq.a.split('\n').map(x => `<p style="margin:6px 0">${esc(x)}</p>`).join('')}<p class="status" style="margin:6px 0 0">${esc(faq.r)}</p></div>`;
+  if (faq2) h += `<details style="margin-top:8px"><summary><b>Also: ${esc(faq2.t)}</b></summary>${faq2.a.split('\n').map(x => `<p style="margin:6px 0">${esc(x)}</p>`).join('')}<p class="status">${esc(faq2.r)}</p></details>`;
   if (names.size) h += '<h3>Cards in your question</h3>' + [...names].slice(0, 4).map(cardHTML).join('');
-  h += scored.length ? '<h3>Matching rules notes</h3>' + scored.map(([, l]) => `<p style="margin:8px 0;padding:8px 10px;border-left:3px solid var(--acc);background:var(--bg)">${esc(l.replace(/^[-*]\s*/, ''))}</p>`).join('') : '<p>No rules note matched those words. Try a keyword like "Deflect", "showdown" or a rule number.</p>';
-  h += `<p class="status">This app answers from its built-in rules notes and card texts, offline. For a full judge-style answer in plain words, <a href="https://claude.ai/artifact/DCiWF9b8SHqP9wrsyZC3Ds#cards" target="_blank" rel="noopener">ask in the Claude version ↗</a>.</p>`;
+  if (scored.length) h += `<h3>${faq ? 'More from the rules notes' : 'Matching rules notes'}</h3>` + scored.map(([, l]) => `<p style="margin:8px 0;padding:8px 10px;border-left:3px solid var(--acc);background:var(--bg)">${esc(l.replace(/^[-*]\s*/, ''))}</p>`).join('');
+  if (!faq && !scored.length && !names.size) h += '<p>Nothing matched those words. Try a card name, a keyword like "Deflect" or "showdown", or a rule number.</p>';
+  h += `<p class="status">This app answers from its built-in rules notes and card texts, offline. Card text beats these notes when they disagree. For a full judge-style answer, <a href="https://claude.ai/artifact/DCiWF9b8SHqP9wrsyZC3Ds#cards" target="_blank" rel="noopener">ask in the Claude version ↗</a>.</p>`;
   $('ans').innerHTML = '<div style="white-space:normal">' + h + '</div>'; }
+let FAQ = null; fetch('faq.json').then(r => r.ok ? r.json() : null).then(f => { FAQ = f; }).catch(() => {});
 let sampleFn = null;
 $('askbtn').addEventListener('click', async () => {
   const q = $('ask').value.trim(); if (!q) return;
