@@ -155,6 +155,7 @@ button:disabled{opacity:.5;cursor:default}
   <h1>The Riftbound Genie</h1>
   <div class="runes" aria-hidden="true"><i style="background:var(--fury)"></i><i style="background:var(--calm)"></i><i style="background:var(--mind)"></i><i style="background:var(--body)"></i><i style="background:var(--chaos)"></i><i style="background:var(--order)"></i></div>
   <p class="sub">Your decklists, sideboards, matchups, rules answers and the meta, in your pocket. Rules: Core Rules of July 16, 2026.</p>
+  <p class="sub" id="appver" style="font-size:12px;opacity:.7">App version: Nov 22, 12:33 AM (it updates itself when you open it online)</p>
   <p class="links"><a href="https://claude.ai/artifact/2GGnBEXFhME1yV4K1eNgYB" target="_blank" rel="noopener">My decklists doc ↗</a></p>
   <div class="tabs" role="tablist">
     <button role="tab" aria-selected="true" data-v="mine">My decks</button>
@@ -580,14 +581,14 @@ async function startEngine(){
 
 /* cards & rules */
 function cardHTML(n){ const c = LIB[n]; const cost = [c.e != null ? c.e + ' energy' : '', c.p ? c.p + ' power' : ''].filter(Boolean).join(' + ');
-  return `<article><h3>${esc(n)}</h3><div>${(c.d||[]).map(d => `<span class="chip" style="color:${RUNE[d]||'inherit'}">${esc(d)}</span>`).join('')}<span class="chip">${esc(c.t||'')}</span>${c.r ? `<span class="chip">${esc(c.r)}</span>` : ''}${c.ban ? `<span class="chip bad">Banned (${esc(String(c.ban))})</span>` : ''}${c.sim === 'partial' ? '<span class="chip">Test engine: most of its text</span>' : c.sim === 'stats' ? '<span class="chip">Test engine: stats and keywords only</span>' : c.sim ? '' : '<span class="chip">Not in test engine</span>'}</div>
-  <p>${cost ? esc(cost) : ''}${c.m != null ? ` · ${c.m} Might` : ''}</p><p>${esc(c.x || 'No rules text.')}</p></article>`; }
+  return `<article><h3>${esc(n)}</h3><div>${(c.d||[]).map(d => `<span class="chip" style="color:${RUNE[d]||'inherit'}">${esc(d)}</span>`).join('')}<span class="chip">${esc(c.t||'')}</span>${c.r ? `<span class="chip">${esc(c.r)}</span>` : ''}${c.ban ? `<span class="chip bad">Banned (${esc(String(c.ban))})</span>` : ''}${c.token ? '<span class="chip">Token</span>' : ''}${c.sim === 'partial' ? '<span class="chip">Test engine: most of its text</span>' : c.sim === 'stats' ? '<span class="chip">Test engine: stats and keywords only</span>' : c.sim ? '' : '<span class="chip">Not in test engine</span>'}</div>
+  <p>${cost ? esc(cost) : ''}${c.m != null ? ` · ${c.m} Might` : ''}</p><p>${esc(c.x || 'No rules text.')}</p>${c.aka && c.aka.length ? `<p class="sub">Also listed as: ${c.aka.map(esc).join(', ')}</p>` : ''}</article>`; }
 function search(q, col, type, max){ q = norm(q || ''); const words = q.split(/\s+/).filter(Boolean);
   const out = [];
   for (const [n, c] of Object.entries(LIB)){
     if (col && !(c.d || []).includes(col)) continue; if (type && c.t !== type) continue;
-    const nn = norm(n), tx = ((c.x || '') + ' ' + (c.g || []).join(' ') + ' ' + (c.t || '') + ' ' + (c.sup || '')).toLowerCase(); let s = 0;
-    if (!words.length) s = 1; else { if (nn === q) s += 100; if (nn.startsWith(q)) s += 30; for (const w of words){ if (nn.includes(w)) s += 10; else if (tx.includes(w)) s += 2; else { s = -1; break; } } }
+    const nn = norm(n), aka = (c.aka || []).map(norm), all = [nn, ...aka].join(' | '), tx = ((c.x || '') + ' ' + (c.g || []).join(' ') + ' ' + (c.t || '') + ' ' + (c.sup || '')).toLowerCase(); let s = 0;
+    if (!words.length) s = 1; else { if (nn === q || aka.includes(q)) s += 100; if (nn.startsWith(q) || aka.some(a => a.startsWith(q))) s += 30; for (const w of words){ if (all.includes(w)) s += 10; else if (tx.includes(w)) s += 2; else { s = -1; break; } } }
     if (s > 0) out.push([s, n]); }
   out.sort((a,b) => b[0] - a[0] || a[1].localeCompare(b[1])); return out.slice(0, max || 30).map(x => x[1]); }
 function doSearch(){ const r = search($('q').value, $('fcol').value, $('ftype').value, 30);
@@ -603,6 +604,7 @@ function offlineAnswer(q){
   const names = new Set(), heads = {};
   for (const n of Object.keys(LIB)){ const full = norm(n).replace(/[^a-z0-9' ]/g, ' ').replace(/\s+/g, ' ').trim();
     if (full.length >= 4 && nq.includes(' ' + full + ' ')) names.add(n);
+    else if ((LIB[n].aka || []).some(a => { const fa = norm(a).replace(/[^a-z0-9' ]/g, ' ').replace(/\s+/g, ' ').trim(); return fa.length >= 4 && nq.includes(' ' + fa + ' '); })) names.add(n);
     else if (norm(n).includes(',')){ const h = norm(n).split(',')[0].trim(); if (h.length >= 4 && nq.includes(' ' + h + ' ')) (heads[h] = heads[h] || []).push(n); } }
   for (const [h, ns] of Object.entries(heads)){ if ([...names].some(m => norm(m).startsWith(h))) continue; const ok = ns.filter(n => !LIB[n].ban); if (ok.length === 1) names.add(ok[0]); else if (ok.length) names.add(ok.find(n => LIB[n].sim) || ok[0]); }
   // a plain-English answer for the most common questions
@@ -757,5 +759,5 @@ fetch('mydecks.json').then(r => r.ok ? r.json() : null).then(m => { if (!m) retu
 }
 
 </script>
-<script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
+<script>if ('serviceWorker' in navigator) addEventListener('load', () => { let reloaded = false; const had = !!navigator.serviceWorker.controller; navigator.serviceWorker.addEventListener('controllerchange', () => { if (had && !reloaded) { reloaded = true; location.reload(); } }); navigator.serviceWorker.register('sw.js', {updateViaCache: 'none'}).then(r => { r.update(); document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') r.update(); }); }).catch(() => {}); });</script>
 </body></html>

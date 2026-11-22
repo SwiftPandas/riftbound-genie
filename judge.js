@@ -73,18 +73,19 @@ function analyse(name, c) {
 }
 
 /* ---------- finding cards in a question ---------- */
+const IDX = new WeakMap();   // the name index lives outside LIB (stored inside it, it showed up as an extra "card" in the library: found Nov 22)
 function index(LIB) {
-  if (LIB._idx) return LIB._idx;
+  if (IDX.has(LIB)) return IDX.get(LIB);
   const full = [], heads = {};
   for (const n of Object.keys(LIB)) {
-    if (n === '_idx') continue;
     const f = clean(n); const one = COMMONWORD.has(n);
     if (f.length >= 3) full.push([f, n, one]);
     if (n.includes(',')) { const h = clean(n.split(',')[0]); if (h.length >= 3) { (heads[h] = heads[h] || []).push(n); (heads[h + 's'] = heads[h + 's'] || []).push(n); } }
     if (f.length >= 4 && !one) full.push([f + 's', n, false]);   // plural or possessive: "bombs", "Elnuk Herds"
+    for (const a of (LIB[n].aka || [])) { const fa = clean(a); if (fa.length >= 3) full.push([fa, n, false]); }   // nicknames: "Matriarch of War", "Final Spark, Lux"
   }
   full.sort((a, b) => b[0].length - a[0].length);
-  return (LIB._idx = {full, heads});
+  const out = {full, heads}; IDX.set(LIB, out); return out;
 }
 // one-word card names that are also ordinary words ("block", "charm", "gust") only count as cards when the question
 // treats them as a card: capitalised, or right after cast / play / use / with / my / their / a / does / is ...
@@ -217,7 +218,7 @@ function removalAns(sp, t, ctx) {
     const dies = n >= Math.max(might, 1);
     res.kills = dies ? 'yes' : 'no'; res.damage = n; res.might = might;
     lines.push(`${esc(sp.name)} deals ${n} to ${esc(t.name)}${notes.length ? ' (' + notes.join(', ') + ')' : ''}, which has ${might} Might. ${dies ? `That's lethal (at least its Might), so it dies at the next cleanup.` : `That isn't lethal (it needs ${might}), so it survives, and the damage heals at the end of the turn.`}`);
-    lines.push(`Shield only adds Might while a unit is defending in combat, so outside combat it doesn't help against spell damage${t.shield ? ` (in combat, ${esc(t.name)} as a defender would have ${might + t.shield} Might)` : ''}.`);
+    if (t.shield) lines.push(`Shield only adds Might while a unit is defending in combat, so outside combat it doesn't help against spell damage${t.shield ? ` (in combat, ${esc(t.name)} as a defender would have ${might + t.shield} Might)` : ''}.`);
   } else if (e.kind === 'kill') {
     const ok = e.max == null || might <= e.max; res.kills = ok ? 'yes' : 'no';
     lines.push(ok ? `Yes: ${esc(sp.name)} kills it${e.max != null ? ` (${esc(t.name)} has ${might} Might, at most ${e.max})` : ''}. Killing isn't damage, so Shield and damage prevention don't stop it.` : `No: ${esc(sp.name)} can only kill a unit with ${e.max} Might or less, and ${esc(t.name)} has ${might}.`);
