@@ -150,10 +150,33 @@
    "resolves",
    "in response",
    "stack",
-   "order"
+   "order",
+   "last in first out",
+   "first in last out",
+   "lifo",
+   "respond to a response",
+   "counter a counter",
+   "counter war",
+   "attack triggers",
+   "defend triggers",
+   "chain resolve",
+   "counter their",
+   "after they",
+   "they play",
+   "and i play",
+   "responded to my",
+   "my response",
+   "resolve before",
+   "resolves before",
+   "can i defy",
+   "can i hush",
+   "can i wind wall",
+   "defy their",
+   "hush their",
+   "wind wall their"
   ],
-  "a": "Cards and abilities go on the chain. While a chain exists only [Reaction] cards can be added. When everyone passes in a row, the newest item resolves first, then players can respond again before the next one. So the last thing played resolves first. Units, gear and resource-adding abilities resolve as soon as they finish being played and can't be responded to. If a spell's target is gone or no longer legal when it resolves, that part is skipped.",
-  "r": "CR 325-348, 358-359"
+  "a": "Cards and abilities go on the chain. While a chain exists only [Reaction] cards can be added. When everyone passes in a row, the newest item resolves first, then players can respond again before the next one. So the last thing played resolves first. Units, gear and resource-adding abilities resolve as soon as they finish being played and can't be responded to. If a spell's target is gone or no longer legal when it resolves, that part is skipped. You can respond to a response: if they counter your spell, you can counter their counter (a counter war), and again the newest card resolves first. Last in, first out: the first card played is the last to resolve. In combat, the attacker's \"when I attack\" triggers go on the chain first and the defender's \"when I defend\" triggers go on last, so the defender's resolve first; each player orders their own. After each item resolves, units with lethal damage die (together) before the next item resolves, and a trigger still resolves even if its unit has died.",
+  "r": "CR 325-348, 358-359, 383.3.d, 464"
  },
  {
   "t": "What happens when my unit dies?",
@@ -744,5 +767,21 @@
    "CR 418.8",
    "CR 713"
   ]
+ },
+ {
+  "t": "What happens when Orianna's legend animates a gear (The Ball)?",
+  "k": [
+   "orianna",
+   "animate",
+   "animates",
+   "animated",
+   "the ball",
+   "lady of clockwork",
+   "unit gear",
+   "gear becomes a unit",
+   "ball"
+  ],
+  "a": "Orianna, Lady of Clockwork: at the start of your Main Phase you may pay [1] to choose a friendly gear, in your base or at a battlefield (a deployed The Ball counts). It becomes a unit gear with Might equal to its Energy cost (The Ball: 5) and stays a unit until you choose another gear. Becoming a unit isn't a move, so The Ball's \"when you play or move this\" doesn't trigger then. If it's at a battlefield you don't control, it contests it: a showdown if no enemy units are there (you can conquer), or a fight with it as the attacker if there are. As a unit, The Ball has Ganking (it can move from battlefield to battlefield), and every time it moves you choose: draw 1 or deal 2 to enemy units there. It's still a gear (it counts for Patched Porobot and lets Orianna, Exquisite deal combat damage); if it's returned to hand or killed, The Ball card goes to your hand or trash.",
+  "r": "Orianna, Lady of Clockwork; The Ball; CR 323.10.a, 446"
  }
 ]

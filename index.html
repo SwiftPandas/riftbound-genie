@@ -155,7 +155,7 @@ button:disabled{opacity:.5;cursor:default}
   <h1>The Riftbound Genie</h1>
   <div class="runes" aria-hidden="true"><i style="background:var(--fury)"></i><i style="background:var(--calm)"></i><i style="background:var(--mind)"></i><i style="background:var(--body)"></i><i style="background:var(--chaos)"></i><i style="background:var(--order)"></i></div>
   <p class="sub">Your decklists, sideboards, matchups, rules answers and the meta, in your pocket. Rules: Core Rules 1.5 (Radiance update, October 2026).</p>
-  <p class="sub" id="appver" style="font-size:12px;opacity:.7">App version: Nov 25, 3:12 PM (it updates itself when you open it online)</p>
+  <p class="sub" id="appver" style="font-size:12px;opacity:.7">App version: Nov 25, 7:39 PM (it updates itself when you open it online)</p>
   <p class="links"><a href="https://claude.ai/artifact/2GGnBEXFhME1yV4K1eNgYB" target="_blank" rel="noopener">My decklists doc ↗</a></p>
   <div class="tabs" role="tablist">
     <button role="tab" aria-selected="true" data-v="mine">My decks</button>
@@ -544,10 +544,11 @@ async function run(){
   const ch = $('champ').value; $('btitle').textContent = `Results: ${ch}`; if (innerWidth < 900) document.querySelector('.board').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'}); $('run').disabled = true; $('run').textContent = 'Testing…';
   myLeg = legendOf(ch); const me = JSON.stringify({legend: myLeg, champ: ch, list: parsed.list});
   try {
+    const jobs = [];
     for (const o of opps){ let left = n, seed = 7 + o.seed; const od = JSON.stringify(o.deck);
-      while (left > 0){ const k = Math.min(look ? 1 : 5, left); const out = JSON.parse(runBatch(me, od, k, seed, look)); seed++; left -= k;
-        const r = res[o.name] || (res[o.name] = {w:0,n:0}); r.w += out.w; r.n += out.n; doneN += out.n;
-        $('prog').style.width = (100 * doneN / total) + '%'; bars(); await tick(); } }
+      while (left > 0){ const k = Math.min(look ? 1 : 5, left); jobs.push({name: o.name, me, op: od, n: k, seed, look}); seed++; left -= k; } }
+    await runJobs(jobs, (j, out) => { const r = res[j.name] || (res[j.name] = {w:0,n:0}); r.w += out.w; r.n += out.n; doneN += out.n;
+      $('prog').style.width = (100 * doneN / total) + '%'; bars(); });
   } catch (err) { $('estatus').innerHTML = `<span class="bad">Engine error: ${esc(String(err.message || err).slice(-300))}</span>`; }
   running = false; $('run').textContent = 'Test again'; check(); }
 $('list').addEventListener('input', () => { save(); check(); });
@@ -560,6 +561,34 @@ $('copy').addEventListener('click', async () => {
   try{ await navigator.clipboard.writeText(t); $('copy').textContent = 'Copied'; } catch(e){ $('copy').textContent = 'Copy blocked'; }
   setTimeout(() => $('copy').textContent = 'Copy results', 1500); });
 
+/* game pool: run matchup chunks on every core with Web Workers (same chunks and seeds as one core, so results are identical) */
+let POOL = null;
+function makePool(vfs){
+  try {
+    const n = Math.max(1, Math.min(6, (navigator.hardwareConcurrency || 2) - 1)); if (n < 2 || typeof Worker === 'undefined') return Promise.resolve(null);
+    const url = new URL('engine.js', location.href).href;
+    const src = `importScripts(${JSON.stringify(url)}); let E = null;
+const mk = d => { const cards = []; for (const [c, q] of Object.entries(d.list)) for (let i = 0; i < q; i++) cards.push(c); const i = cards.indexOf(d.champ); if (i >= 0) cards.splice(i, 1); return [d.legend, d.champ, cards]; };
+onmessage = ev => { const m = ev.data; try { if (m.vfs){ E = $makeEngine(m.vfs); postMessage({ok: true}); return; }
+  const me = JSON.parse(m.me), op = JSON.parse(m.op); const rng = new E.PyRandom(m.seed); let w = 0;
+  for (let k = 0; k < m.n; k++){ const g = new E.Game(mk(me), mk(op), rng); if (m.look){ g.P[0].look = m.look; g.P[1].look = m.look; } if (g.play() === 0) w++; }
+  postMessage({w: w, n: m.n}); } catch (e) { postMessage({err: String((e && e.message) || e)}); } };`;
+    const bu = URL.createObjectURL(new Blob([src], {type: 'text/javascript'}));
+    const ws = []; for (let k = 0; k < n; k++) ws.push(new Worker(bu));
+    return Promise.all(ws.map(w => new Promise((res, rej) => { w.onmessage = e => e.data.ok ? res(w) : rej(new Error(e.data.err)); w.onerror = e => rej(new Error(e.message || 'worker failed')); w.postMessage({vfs}); })))
+      .then(ok => ok, () => { ws.forEach(w => w.terminate()); return null; });
+  } catch (e) { return Promise.resolve(null); }
+}
+async function runJobs(jobs, onDone){
+  if (POOL && POOL.length > 1){
+    let next = 0;
+    const work = w => new Promise((res, rej) => { const go = () => { if (next >= jobs.length) return res(); const j = jobs[next++];
+      w.onmessage = e => { if (e.data.err) return rej(new Error(e.data.err)); onDone(j, e.data); go(); };
+      w.onerror = e => rej(new Error(e.message || 'worker error'));
+      w.postMessage({me: j.me, op: j.op, n: j.n, seed: j.seed, look: j.look || 0}); }; go(); });
+    await Promise.all(POOL.map(work)); return; }
+  for (const j of jobs){ onDone(j, JSON.parse(runBatch(j.me, j.op, j.n, j.seed, j.look || 0))); await tick(); }
+}
 async function startEngine(){
   try {
     if (typeof $makeEngine !== 'function') throw new Error('the engine file did not load');
@@ -575,6 +604,7 @@ async function startEngine(){
       return JSON.stringify({w, n}); };
     ready = true;
     $('estatus').innerHTML = '<span class="ok">Engine ready.</span> Every game runs on your device.'; check();
+    makePool(vfs).then(p => { POOL = p; if (p) $('estatus').innerHTML = `<span class="ok">Engine ready.</span> Every game runs on your device, on ${p.length} cores at once.`; });
   } catch (err) {
     $('estatus').innerHTML = `<span class="bad">The engine couldn't start: ${esc(String(err.message || err).slice(0,240))}</span>. Card lookup and Meta still work. Try reloading the page; if it keeps failing, copy this message to Claude.`;
     $('run').textContent = 'Engine unavailable'; }
