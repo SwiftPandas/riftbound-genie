@@ -1,5 +1,5 @@
 // Riftbound Genie offline cache. Online: the newest file from the web (saved for offline); offline or slow (3 s): the saved copy.
-const C = 'riftgenie-24fb30891b', FILES = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "engine.js", "judge.js", "library.json", "decks.json", "legends.json", "meta.json", "rules.txt", "calib.json", "kw.json", "might.json", "domains.json", "cards_official.json", "cards.txt", "mydecks.json", "common.json", "faq.json"];
+const C = 'riftgenie-f2b1e60e51', FILES = ["./", "index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png", "engine.js", "judge.js", "library.json", "decks.json", "legends.json", "meta.json", "rules.txt", "calib.json", "kw.json", "might.json", "domains.json", "cards_official.json", "cards.txt", "mydecks.json", "common.json", "faq.json"];
 self.addEventListener('install', e => { e.waitUntil(caches.open(C).then(c => c.addAll(FILES.map(f => new Request(f, {cache: 'reload'})))).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', e => {
