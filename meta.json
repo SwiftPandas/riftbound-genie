@@ -531,14 +531,107 @@
     "Ornn, Blacksmith": 1
    },
    "note": "RQ Los Angeles, Sept; still legal after the Nov 23 bans. Shown real-world adjusted."
+  },
+  "Evelynn": {
+   "legend": "Evelynn",
+   "champ": "Evelynn, Entrancing",
+   "list": {
+    "Boots of Swiftness": 1,
+    "Edge of Night": 2,
+    "Evelynn, Entrancing": 1,
+    "Bedeviling Stranger": 2,
+    "Tornado Warrior": 3,
+    "Pyke, Returned": 3,
+    "Kinkou Initiate": 3,
+    "Ezreal, Prodigy": 1,
+    "Fizz, Trickster": 1,
+    "Reckless Innovator": 2,
+    "Gutter Guardian": 2,
+    "Tail-Cloaked Matriarch": 3,
+    "Vex, Apathetic": 2,
+    "Rengar, Trophy Hunter": 3,
+    "Punch First": 2,
+    "Gust": 2,
+    "Switcheroo": 1,
+    "Rampage": 2,
+    "Star-Crossed": 2,
+    "Hold 'Em": 2
+   },
+   "note": "MFG's Riftbound $2k (Tacoma, Nov 22, 37 players, post-ban), 2nd (Haven Gilbert-Avila). Real post-ban list. Engine only (no real-world data to adjust it yet)."
+  },
+  "Sett": {
+   "legend": "Sett",
+   "champ": "Sett, Kingpin",
+   "list": {
+    "Trifarian Captain": 3,
+    "Irresistible Faefolk": 3,
+    "Pit Rookie": 3,
+    "Kayle, Justified": 2,
+    "Nidalee, Cat Form": 2,
+    "First Mate": 3,
+    "Sett, Kingpin": 1,
+    "Fiora, Victorious": 3,
+    "Vi, Peacekeeper": 1,
+    "Rengar, Trophy Hunter": 2,
+    "Graves, Blasting Through": 2,
+    "Punch First": 3,
+    "Showstopper": 3,
+    "Rampage": 3,
+    "Call to Glory": 3,
+    "Pillaged Armory": 3
+   },
+   "note": "Open the Vault $5k (Nov 21, 42 players, post-ban), 7th (Dave Salinas). Real post-ban list. Engine only (no real-world data to adjust it yet)."
+  },
+  "Ezreal": {
+   "legend": "Ezreal",
+   "champ": "Ezreal, Prodigy",
+   "list": {
+    "Bellows Breath": 3,
+    "Stupefy": 3,
+    "Gust": 3,
+    "Temporal Breach": 1,
+    "Hard Bargain": 1,
+    "An Offer You Can't Refuse": 1,
+    "Star-Crossed": 3,
+    "Wages of Pain": 3,
+    "Deadly Flourish": 3,
+    "Singularity": 1,
+    "Bewitching Spirit": 3,
+    "Ezreal, Prodigy": 1,
+    "Fizz, Trickster": 3,
+    "Vex, Apathetic": 3,
+    "Thousand-Tailed Watcher": 2,
+    "The List": 2,
+    "Treasure Trove": 2,
+    "Pack of Wonders": 2
+   },
+   "note": "Open the Vault $5k (Nov 21, 42 players, post-ban), 8th (Luis Del Cid). Real post-ban list. Engine only (no real-world data to adjust it yet)."
+  },
+  "Rek'Sai": {
+   "legend": "Rek'Sai",
+   "champ": "Rek'Sai, Breacher",
+   "list": {
+    "Trifarian Captain": 3,
+    "Carrion Dredger": 3,
+    "Inferna": 3,
+    "Rek'Sai, Breacher": 1,
+    "Rengar, Pouncing": 1,
+    "Hunting Dog": 2,
+    "Shimmering Swimmer": 3,
+    "Bilgewater Tracker": 3,
+    "Faithful Manufactor": 3,
+    "Noxus Hopeful": 3,
+    "Undertitan": 3,
+    "Blood Rush": 1,
+    "Cull the Weak": 3,
+    "Falling Star": 3,
+    "Imperial Decree": 3,
+    "Concert Poster": 2
+   },
+   "note": "MFG's Riftbound $2k (Tacoma, Nov 22, 37 players, post-ban), 3rd (Matthew Van Ginneken). Real post-ban list. Engine only (no real-world data to adjust it yet)."
   }
  },
- "notInEngine": [
-  "Sett",
-  "Ezreal",
-  "Evelynn (Agony's Embrace)",
-  "Rek'Sai"
- ],
+ "notInEngine": [],
  "common": {
   "source": "RQ Los Angeles, 36 unique top lists (Sept 2026, before Radiance)",
   "updated": "2026-11-21",
@@ -783,7 +876,7 @@
    ]
   }
  },
- "note": "Real post-ban lists from the first two post-ban events: Open the Vault $5k (Nov 21, 42 players: Azir won, Master Yi 2nd and 5th, Irelia 3rd and 6th, Vex 4th) and MFG's Riftbound $2k (Nov 22, 37 players: Vex won, Evelynn 2nd, Rek'Sai 3rd, Master Yi 4th, Kai'Sa 5th). Vex, Master Yi and Kai'Sa count in your rankings. Azir and Irelia (also real post-ban lists) and Kennen, Rengar, LeBlanc, Akali and Ornn (newest pre-ban lists, banned cards swapped) are shown real-world adjusted and not counted, because the computer can't pilot them well yet. Sett, Ezreal, Evelynn and Rek'Sai made top 8 but the engine can't pilot those legends yet.",
+ "note": "Real post-ban lists from the first two post-ban events: Open the Vault $5k (Nov 21, 42 players: Azir won, Master Yi 2nd and 5th, Irelia 3rd and 6th, Vex 4th) and MFG's Riftbound $2k (Nov 22, 37 players: Vex won, Evelynn 2nd, Rek'Sai 3rd, Master Yi 4th, Kai'Sa 5th). Vex, Master Yi and Kai'Sa count in your rankings. Azir and Irelia (also real post-ban lists) and Kennen, Rengar, LeBlanc, Akali and Ornn (newest pre-ban lists, banned cards swapped) are shown real-world adjusted and not counted, because the computer can't pilot them well yet. Evelynn, Sett, Ezreal and Rek'Sai (real post-ban lists) are now piloted too and shown as wide matchups; they have no real-world adjustment yet.",
  "legendsTitle": "Legends in the post-ban top finishes (13 known: OTV $5k top 8 + MFG $2k top 5)",
  "cardsTitle": "Most played cards in each color (13 post-ban top lists, Nov 21-22)"
 }

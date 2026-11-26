@@ -591,5 +591,131 @@
    "Ornn, Blacksmith": 1
   },
   "group": "Meta decks (RQ Los Angeles, Sept; still legal after the Nov 23 bans)"
+ },
+ "Evelynn": {
+  "legend": "Evelynn",
+  "champ": "Evelynn, Entrancing",
+  "group": "Meta decks (real post-ban results)",
+  "list": {
+   "Boots of Swiftness": 1,
+   "Edge of Night": 2,
+   "Evelynn, Entrancing": 1,
+   "Bedeviling Stranger": 2,
+   "Tornado Warrior": 3,
+   "Pyke, Returned": 3,
+   "Kinkou Initiate": 3,
+   "Ezreal, Prodigy": 1,
+   "Fizz, Trickster": 1,
+   "Reckless Innovator": 2,
+   "Gutter Guardian": 2,
+   "Tail-Cloaked Matriarch": 3,
+   "Vex, Apathetic": 2,
+   "Rengar, Trophy Hunter": 3,
+   "Punch First": 2,
+   "Gust": 2,
+   "Switcheroo": 1,
+   "Rampage": 2,
+   "Star-Crossed": 2,
+   "Hold 'Em": 2
+  },
+  "src": "MFG's Riftbound $2k (Tacoma, Nov 22, 37 players, post-ban), 2nd (Haven Gilbert-Avila)",
+  "bf": [
+   "Hunters' Circle",
+   "Bandle Scouts' Academy",
+   "Startipped Peak"
+  ],
+  "postban": true
+ },
+ "Sett": {
+  "legend": "Sett",
+  "champ": "Sett, Kingpin",
+  "group": "Meta decks (real post-ban results)",
+  "list": {
+   "Trifarian Captain": 3,
+   "Irresistible Faefolk": 3,
+   "Pit Rookie": 3,
+   "Kayle, Justified": 2,
+   "Nidalee, Cat Form": 2,
+   "First Mate": 3,
+   "Sett, Kingpin": 1,
+   "Fiora, Victorious": 3,
+   "Vi, Peacekeeper": 1,
+   "Rengar, Trophy Hunter": 2,
+   "Graves, Blasting Through": 2,
+   "Punch First": 3,
+   "Showstopper": 3,
+   "Rampage": 3,
+   "Call to Glory": 3,
+   "Pillaged Armory": 3
+  },
+  "src": "Open the Vault $5k (Nov 21, 42 players, post-ban), 7th (Dave Salinas)",
+  "bf": [
+   "Valley of Idols",
+   "Packed Amphitheater",
+   "Monastery of Hirana"
+  ],
+  "postban": true
+ },
+ "Ezreal": {
+  "legend": "Ezreal",
+  "champ": "Ezreal, Prodigy",
+  "group": "Meta decks (real post-ban results)",
+  "list": {
+   "Bellows Breath": 3,
+   "Stupefy": 3,
+   "Gust": 3,
+   "Temporal Breach": 1,
+   "Hard Bargain": 1,
+   "An Offer You Can't Refuse": 1,
+   "Star-Crossed": 3,
+   "Wages of Pain": 3,
+   "Deadly Flourish": 3,
+   "Singularity": 1,
+   "Bewitching Spirit": 3,
+   "Ezreal, Prodigy": 1,
+   "Fizz, Trickster": 3,
+   "Vex, Apathetic": 3,
+   "Thousand-Tailed Watcher": 2,
+   "The List": 2,
+   "Treasure Trove": 2,
+   "Pack of Wonders": 2
+  },
+  "src": "Open the Vault $5k (Nov 21, 42 players, post-ban), 8th (Luis Del Cid)",
+  "bf": [
+   "Frozen Fortress",
+   "Vilemaw's Lair",
+   "Sigil of the Storm"
+  ],
+  "postban": true
+ },
+ "Rek'Sai": {
+  "legend": "Rek'Sai",
+  "champ": "Rek'Sai, Breacher",
+  "group": "Meta decks (real post-ban results)",
+  "list": {
+   "Trifarian Captain": 3,
+   "Carrion Dredger": 3,
+   "Inferna": 3,
+   "Rek'Sai, Breacher": 1,
+   "Rengar, Pouncing": 1,
+   "Hunting Dog": 2,
+   "Shimmering Swimmer": 3,
+   "Bilgewater Tracker": 3,
+   "Faithful Manufactor": 3,
+   "Noxus Hopeful": 3,
+   "Undertitan": 3,
+   "Blood Rush": 1,
+   "Cull the Weak": 3,
+   "Falling Star": 3,
+   "Imperial Decree": 3,
+   "Concert Poster": 2
+  },
+  "src": "MFG's Riftbound $2k (Tacoma, Nov 22, 37 players, post-ban), 3rd (Matthew Van Ginneken)",
+  "bf": [
+   "Forbidding Waste",
+   "Void Gate",
+   "The Candlelit Sanctum"
+  ],
+  "postban": true
  }
 }
